@@ -1,0 +1,58 @@
+<script>
+  const cards = document.querySelectorAll('.card');
+  const formSection = document.getElementById('formSection');
+  const formTitle = document.getElementById('formTitle');
+  const helpForm = document.getElementById('helpForm');
+  const successMsg = document.getElementById('successMsg');
+  const contactInfo = document.getElementById('contactInfo');
+
+  let selectedService = null;
+
+  // Create dynamic field
+  const timeField = document.createElement('input');
+  timeField.type = 'text';
+  timeField.id = 'datetime';
+  timeField.placeholder = 'დრო / საათი / დღე';
+  timeField.autocomplete = 'off';
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      selectedService = card.dataset.service;
+      formSection.classList.add('active');
+      successMsg.style.display = 'none';
+      contactInfo.style.display = 'none';
+
+      if (selectedService === 'windows') {
+        formTitle.textContent = '💻 Windows-ის გადაყენების ფორმა';
+        if (!helpForm.contains(timeField)) {
+          helpForm.insertBefore(timeField, helpForm.querySelector('textarea'));
+        }
+      } else {
+        formTitle.textContent = selectedService === 'tech'
+          ? '🔧 ტექნიკური დახმარების ფორმა'
+          : '🧩 სისტემის აწყობის ფორმა';
+        if (helpForm.contains(timeField)) {
+          helpForm.removeChild(timeField);
+        }
+      }
+    });
+  });
+
+  helpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    formSection.classList.add('active');
+    helpForm.style.display = 'none';
+    successMsg.style.display = 'block';
+
+    if (selectedService === 'windows') {
+      successMsg.textContent = '✅ ჩვენი გუნდი მალე გიპასუხებთ.';
+    } else {
+      contactInfo.innerHTML = `
+        📞 დაგვიკავშირდით: <strong>555 78 39 19</strong><br />
+        📍 მისამართი: <strong>მარო თარხნიშვილის 4</strong>
+      `;
+      contactInfo.style.display = 'block';
+      successMsg.textContent = '✅ გმადლობთ შეტყობინებისთვის.';
+    }
+  });
+</script>
